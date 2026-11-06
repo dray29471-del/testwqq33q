@@ -4,8 +4,7 @@
 -- Older clients without BuilderSans fall back to the previous SourceSans.
 local FONT = Enum.Font.SourceSansSemibold
 local FONT_BOLD = Enum.Font.SourceSansBold
--- BuilderSans может отсутствовать в некоторых клиентах Roblox.
--- Проверяем существование перед присвоением, чтобы не падать с nil.
+-- BuilderSans may be missing in some Roblox clients. Check before assigning.
 do
 	local okB, builderMedium = pcall(function() return Enum.Font.BuilderSansMedium end)
 	local okB2, builderBold = pcall(function() return Enum.Font.BuilderSansBold end)
