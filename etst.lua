@@ -1,14 +1,17 @@
--- Neverlose Roblox UI v30: compact function rows and corrected right-column bounds
+-- SILENT VOID Roblox UI v30: compact function rows and corrected right-column bounds
 -- Preserves register-limit/search fixes and restores full-size control rows.
--- Neverlose uses Inter; BuilderSans is the closest built-in Roblox family.
+-- Silent Void uses Inter; BuilderSans is the closest built-in Roblox family.
 -- Older clients without BuilderSans fall back to the previous SourceSans.
 local FONT = Enum.Font.SourceSansSemibold
 local FONT_BOLD = Enum.Font.SourceSansBold
-pcall(function()
-	-- Medium matches Neverlose's Inter weight better than Regular.
-	FONT = Enum.Font.BuilderSansMedium
-	FONT_BOLD = Enum.Font.BuilderSansBold
-end)
+-- BuilderSans может отсутствовать в некоторых клиентах Roblox.
+-- Проверяем существование перед присвоением, чтобы не падать с nil.
+do
+	local okB, builderMedium = pcall(function() return Enum.Font.BuilderSansMedium end)
+	local okB2, builderBold = pcall(function() return Enum.Font.BuilderSansBold end)
+	if okB and builderMedium then FONT = builderMedium end
+	if okB2 and builderBold then FONT_BOLD = builderBold end
+end
 local LoadAcrylic = function()
 	local GuiSystem = {};
 	local acrylicId = 0
