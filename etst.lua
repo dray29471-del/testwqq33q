@@ -1,16 +1,14 @@
--- SILENT VOID Roblox UI v30: compact function rows and corrected right-column bounds
+-- SilentVoid Roblox UI v30: compact function rows and corrected right-column bounds
 -- Preserves register-limit/search fixes and restores full-size control rows.
--- Silent Void uses Inter; BuilderSans is the closest built-in Roblox family.
+-- SilentVoid uses Inter; BuilderSans is the closest built-in Roblox family.
 -- Older clients without BuilderSans fall back to the previous SourceSans.
 local FONT = Enum.Font.SourceSansSemibold
 local FONT_BOLD = Enum.Font.SourceSansBold
--- BuilderSans may be missing in some Roblox clients. Check before assigning.
-do
-	local okB, builderMedium = pcall(function() return Enum.Font.BuilderSansMedium end)
-	local okB2, builderBold = pcall(function() return Enum.Font.BuilderSansBold end)
-	if okB and builderMedium then FONT = builderMedium end
-	if okB2 and builderBold then FONT_BOLD = builderBold end
-end
+pcall(function()
+	-- Medium matches SilentVoid's Inter weight better than Regular.
+	FONT = Enum.Font.BuilderSansMedium
+	FONT_BOLD = Enum.Font.BuilderSansBold
+end)
 local LoadAcrylic = function()
 	local GuiSystem = {};
 	local acrylicId = 0
@@ -20,7 +18,7 @@ local LoadAcrylic = function()
 
 	function GuiSystem:Hash()
 		acrylicId = acrylicId + 1
-		return "NeverloseAcrylic_" .. tostring(acrylicId)
+		return "SilentVoidAcrylic_" .. tostring(acrylicId)
 	end
 
 	local function Hiter(planePos, planeNormal, rayOrigin, rayDirection)
@@ -56,7 +54,7 @@ local LoadAcrylic = function()
 			effect.FocusDistance = 51.6
 			effect.InFocusRadius = 50
 			effect.NearIntensity = 1
-			effect.Name = "NeverloseDepthOfField"
+			effect.Name = "SilentVoidDepthOfField"
 			sharedDepthOfField = effect
 		end
 		return sharedDepthOfField
@@ -79,11 +77,11 @@ local LoadAcrylic = function()
 		Part.CanQuery = false
 		pcall(function()
 			local PhysicsService = game:GetService('PhysicsService')
-			if PhysicsService:IsCollisionGroupRegistered('NeverloseGui') then
-				Part.CollisionGroup = 'NeverloseGui'
+			if PhysicsService:IsCollisionGroupRegistered('SilentVoidGui') then
+				Part.CollisionGroup = 'SilentVoidGui'
 			else
-				PhysicsService:RegisterCollisionGroup('NeverloseGui')
-				Part.CollisionGroup = 'NeverloseGui'
+				PhysicsService:RegisterCollisionGroup('SilentVoidGui')
+				Part.CollisionGroup = 'SilentVoidGui'
 			end
 		end)
 		Part.Size = Vector3.new(1, 1, 1) * 0.01;
@@ -525,7 +523,7 @@ local function New(class, props, parent)
 		obj.TextYAlignment = Enum.TextYAlignment.Center
 		obj.TextScaled = false
 		-- Sized for BuilderSans/Inter metrics (SourceSans needed ~2px more for the same look).
-		-- One step up from the first BuilderSans pass: Neverlose text reads larger.
+		-- One step up from the first BuilderSans pass: SilentVoid text reads larger.
 		local roleSizes = { Title = 17, GameTitle = 12, TabLabel = 12, TabText = 16, STLabel = 15, SectionLabel = 12,
 			TextToggle = 15, TextDropdown = 15, TextDefault = 14, TopBar = 15, SliderValue = 13,
 			Username = 15, Daysleft = 12, SaveText = 15, HeaderLabel = 12, SearchBox = 15 }
@@ -543,7 +541,7 @@ local function New(class, props, parent)
 		end
 	end
 	if parent then obj.Parent = parent end
-	-- Neverlose control styling, applied by role so section, plate and accordion
+	-- SilentVoid control styling, applied by role so section, plate and accordion
 	-- copies of a control all match: grey regular labels, value fields on a dark
 	-- fill with a hairline border, muted "..." dots.
 	if obj.Name == "TextToggle" and obj:IsA("TextLabel") then
@@ -552,7 +550,7 @@ local function New(class, props, parent)
 		obj.TextColor3 = Color3.fromRGB(205, 208, 218)
 	elseif (obj.Name == "TopBar" or obj.Name == "SliderValue") and obj:IsA("GuiObject") then
 		local isValue = obj.Name == "SliderValue"
-		-- Slider readouts stay quiet in Neverlose: dimmer text and outline.
+		-- Slider readouts stay quiet in SilentVoid: dimmer text and outline.
 		obj.BackgroundColor3 = isValue and Color3.fromRGB(22, 22, 31) or Color3.fromRGB(26, 26, 36)
 		obj.BackgroundTransparency = 0
 		if obj:IsA("TextLabel") then
@@ -567,7 +565,7 @@ local function New(class, props, parent)
 		fieldStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 		fieldStroke.Parent = obj
 	elseif obj.Name == "TextDefault" and obj:IsA("TextLabel") and obj.Parent and obj.Parent.Name == "Selection" then
-		-- Plate selects read "Label .... Value >" like Neverlose ("Scaling  Horizontal >").
+		-- Plate selects read "Label .... Value >" like SilentVoid ("Scaling  Horizontal >").
 		obj.AnchorPoint = Vector2.new(1, 0.5)
 		obj.Position = UDim2.new(1, -24, 0.5, 0)
 		obj.Size = UDim2.new(0.5, 0, 1, 0)
@@ -578,14 +576,14 @@ local function New(class, props, parent)
 		obj.Rotation = -90
 		obj.ImageTransparency = 0.3
 	elseif obj.Name == "Arrow" and obj:IsA("ImageLabel") then
-		-- Neverlose chevron: a touch larger and brighter, and it does not flip.
+		-- SilentVoid chevron: a touch larger and brighter, and it does not flip.
 		obj.Size = UDim2.fromOffset(12, 12)
 		obj.ImageTransparency = 0.15
 	elseif obj.Name == "Line" and obj:IsA("Frame") then
 		obj.BackgroundColor3 = Color3.fromRGB(40, 42, 54)
 	elseif type(obj.Name) == "string" and obj.Name:match("^Dot%d$") and obj:IsA("Frame") then
 		obj.BackgroundColor3 = Color3.fromRGB(150, 154, 166)
-		-- Neverlose's "..." are round dots, not squares.
+		-- SilentVoid's "..." are round dots, not squares.
 		local dotCorner = Instance.new("UICorner")
 		dotCorner.CornerRadius = UDim.new(1, 0)
 		dotCorner.Parent = obj
@@ -603,17 +601,17 @@ end
 
 -- Rounded hover styling for function rows.
 local function AttachRowHover(row)
-	if not row or not row:IsA("GuiObject") or row:GetAttribute("NLRowHoverAttached") then return end
+	if not row or not row:IsA("GuiObject") or row:GetAttribute("SVRowHoverAttached") then return end
 	local ok, baseTransparency = pcall(function() return row.BackgroundTransparency end)
 	if not ok or type(baseTransparency) ~= "number" or baseTransparency < 0.98 then return end
 	local baseColor = row.BackgroundColor3
-	row:SetAttribute("NLRowHoverAttached", true)
+	row:SetAttribute("SVRowHoverAttached", true)
 	if not row:FindFirstChildOfClass("UICorner") then
 		New("UICorner", { CornerRadius = UDim.new(0, 6) }, row)
 	end
 	row.MouseEnter:Connect(function()
 		if not row.Parent then return end
-		-- All hover tints share 0.97: Neverlose hover is a barely-there lift.
+		-- All hover tints share 0.97: SilentVoid hover is a barely-there lift.
 		Tween(row, { BackgroundColor3 = Color3.fromRGB(245, 247, 255), BackgroundTransparency = 0.97 }, 0.11, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 	end)
 	row.MouseLeave:Connect(function()
@@ -711,7 +709,7 @@ SizeSliderChip = function(effect, line, value)
 	value.AnchorPoint = Vector2.new(1, 0.5)
 	value.Position = UDim2.new(1, 0, 0.5, 0)
 	value.Size = UDim2.fromOffset(chipWidth, 22)
-	-- Quiet readout, as in Neverlose (matches the New() SliderValue role).
+	-- Quiet readout, as in SilentVoid (matches the New() SliderValue role).
 	value.BackgroundColor3 = Color3.fromRGB(22, 22, 31)
 	value.TextScaled = false
 	value.TextSize = 13
@@ -734,8 +732,8 @@ SizeSliderChip = function(effect, line, value)
 	line.Size = UDim2.new(1, -(chipWidth + 10), 0, 3)
 	line.BackgroundColor3 = Color3.fromRGB(45, 48, 64)
 	line.BorderSizePixel = 0
-	if not value:GetAttribute("NLSliderChipWatch") then
-		value:SetAttribute("NLSliderChipWatch", true)
+	if not value:GetAttribute("SVSliderChipWatch") then
+		value:SetAttribute("SVSliderChipWatch", true)
 		value:GetPropertyChangedSignal("Text"):Connect(function()
 			if value.Parent and effect.Parent then task.defer(function()
 				if value.Parent and effect.Parent then SizeSliderChip(effect, line, value) end
@@ -905,13 +903,13 @@ local function AddInputSink(frame)
 	}, frame)
 end
 
--- Plate groups: Neverlose splits a settings plate into several cards (one per
+-- Plate groups: SilentVoid splits a settings plate into several cards (one per
 -- feature, e.g. "Override FOV" + "Value"). The plate container starts as a single
 -- card; the first group call turns it into a transparent stack of cards, moving
 -- the rows added so far into the first card. Returns the card new rows go into.
 local function StartPlateGroup(container)
-	if not container:GetAttribute("NLGrouped") then
-		container:SetAttribute("NLGrouped", true)
+	if not container:GetAttribute("SVGrouped") then
+		container:SetAttribute("SVGrouped", true)
 		container.BackgroundTransparency = 1
 		local outline = container:FindFirstChild("CardOutline")
 		if outline then outline.Enabled = false end
@@ -926,8 +924,8 @@ local function StartPlateGroup(container)
 			for _, row in ipairs(rows) do row.Parent = first end
 		end
 	end
-	local order = (container:GetAttribute("NLGroupCount") or 0) + 1
-	container:SetAttribute("NLGroupCount", order)
+	local order = (container:GetAttribute("SVGroupCount") or 0) + 1
+	container:SetAttribute("SVGroupCount", order)
 	local card = New("Frame", {
 		Name = "PlateGroup" .. order,
 		Size = UDim2.new(1, 0, 0, 0),
@@ -977,10 +975,10 @@ local function RefreshRowDividers(listFrame)
 	local rows = {}
 	for _, child in ipairs(listFrame:GetChildren()) do
 		if child:IsA("GuiObject") then
-			if listFrame:GetAttribute("NLGroupOutlineInset") and not child:GetAttribute("NLGroupInsetApplied") then
+			if listFrame:GetAttribute("SVGroupOutlineInset") and not child:GetAttribute("SVGroupInsetApplied") then
 				-- UIPadding already insets the row. An extra -4 offset squeezed
 				-- controls and left uneven spacing along the card outline.
-				child:SetAttribute("NLGroupInsetApplied", true)
+				child:SetAttribute("SVGroupInsetApplied", true)
 			end
 			local divider = child:FindFirstChild("Lines")
 			if divider and divider:IsA("GuiObject") then
@@ -988,7 +986,7 @@ local function RefreshRowDividers(listFrame)
 				divider.Position = UDim2.new(0, 14, 1, -1)
 				divider.Size = UDim2.new(1, -28, 0, 1)
 				divider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-				-- Neverlose row lines sit only ~7 levels above the card (28 on 21).
+				-- SilentVoid row lines sit only ~7 levels above the card (28 on 21).
 				divider.BackgroundTransparency = 0.965
 				divider.BorderSizePixel = 0
 				table.insert(rows, divider)
@@ -1092,8 +1090,8 @@ end
 
 local function AnimateSectionColumn(column)
     if not column or not column.Parent or not column.Visible then return end
-    local token = (column:GetAttribute("NLSectionMotionToken") or 0) + 1
-    column:SetAttribute("NLSectionMotionToken", token)
+    local token = (column:GetAttribute("SVSectionMotionToken") or 0) + 1
+    column:SetAttribute("SVSectionMotionToken", token)
     -- Tab switch: the column rises into place. Columns sit in a UIListLayout,
     -- so Position is ignored; the top padding carries the motion instead.
     local columnPadding = column:FindFirstChildOfClass("UIPadding")
@@ -1112,7 +1110,7 @@ local function AnimateSectionColumn(column)
     for index, section in ipairs(sections) do
         local delaySeconds = math.min((index - 1) * 0.018, 0.054)
         task.delay(delaySeconds, function()
-            if not column.Parent or not column.Visible or column:GetAttribute("NLSectionMotionToken") ~= token then return end
+            if not column.Parent or not column.Visible or column:GetAttribute("SVSectionMotionToken") ~= token then return end
             if not section.Parent or not section.Visible then return end
             -- Keep text at its authored opacity. The former fade-to-transparent pass
             -- was responsible for one-frame label flashes on tab changes.
@@ -1124,10 +1122,10 @@ local function AnimateSectionColumn(column)
             if list and list:IsA("GuiObject") then
                 local outline = list:FindFirstChild("GroupOutline")
                 if outline and outline:IsA("UIStroke") then
-                    local target = outline:GetAttribute("NLBaseTransparency")
+                    local target = outline:GetAttribute("SVBaseTransparency")
                     if type(target) ~= "number" then
                         target = outline.Transparency
-                        outline:SetAttribute("NLBaseTransparency", target)
+                        outline:SetAttribute("SVBaseTransparency", target)
                     end
                     outline.Transparency = math.min(0.84, target + 0.16)
                     Tween(outline, { Transparency = target }, 0.13, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
@@ -1135,10 +1133,10 @@ local function AnimateSectionColumn(column)
             end
             local heading = section:FindFirstChild("SectionLabel", true)
             if heading and heading:IsA("TextLabel") then
-                local baseColor = heading:GetAttribute("NLBaseTextColor")
+                local baseColor = heading:GetAttribute("SVBaseTextColor")
                 if typeof(baseColor) ~= "Color3" then
                     baseColor = heading.TextColor3
-                    heading:SetAttribute("NLBaseTextColor", baseColor)
+                    heading:SetAttribute("SVBaseTextColor", baseColor)
                 end
                 heading.TextColor3 = Color3.fromRGB(190, 199, 224)
                 Tween(heading, { TextColor3 = baseColor }, 0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
@@ -1467,9 +1465,9 @@ local function FadePopupContent(frame, show, dur)
 		if not d:GetAttribute("IsShadowLayer") then
 			local prop, key
 			if d:IsA("TextLabel") or d:IsA("TextButton") or d:IsA("TextBox") then
-				prop, key = "TextTransparency", "NLFadeText"
+				prop, key = "TextTransparency", "SVFadeText"
 			elseif d:IsA("ImageLabel") or d:IsA("ImageButton") then
-				prop, key = "ImageTransparency", "NLFadeImage"
+				prop, key = "ImageTransparency", "SVFadeImage"
 			end
 			if prop then
 				if show then
@@ -1528,10 +1526,10 @@ local function SmoothClose(frame, dur, cb)
 end
 
 function Library:AddWindow(hubTitle, hubImage, gameTitle)
-	hubTitle = tostring(hubTitle or "Neverlose")
+	hubTitle = tostring(hubTitle or "SilentVoid")
 	hubImage = tostring(hubImage or "")
-	gameTitle = tostring(gameTitle or "Counter Strike 2")
-	if string.lower(hubTitle) == "neverlose" and string.lower(gameTitle) == "blockstrike" then
+	gameTitle = tostring(gameTitle or "FTAP")
+	if string.lower(hubTitle) == "SilentVoid" and string.lower(gameTitle) == "FTAP" then
 		hubTitle, gameTitle = gameTitle, hubTitle
 	end
 	local daysLeft = tonumber(Library.DaysLeft) or "Lifetime"
@@ -1566,9 +1564,9 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 		font = FONT,
 		textColor = Color3.fromRGB(226, 228, 236),
 		sectionTitleSize = 12,
-		sectionTitleColor = Color3.fromRGB(92, 96, 106), -- Neverlose section caps: neutral grey
+		sectionTitleColor = Color3.fromRGB(92, 96, 106), -- SilentVoid section caps: neutral grey
 		sectionTitleTransparency = 0,
-		watermarkText = "SILENT VOID BY VIZER",
+		watermarkText = "SilentVoid  •  UI",
 		watermarkVisible = false,
 		cornerRadius = 14, -- matches the window and panel UICorner
 		showContextDots = false,
@@ -1588,8 +1586,8 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 		pcall(function() screenGuiParent = game:GetService("CoreGui") end)
 	end
 
-	local NeverloseCS2 = New("ScreenGui", {
-		Name = "",
+	local SilentVoid = New("ScreenGui", {
+		Name = "SilentVoid",
 		ResetOnSpawn = false,
 		ClipToDeviceSafeArea = false,
 		DisplayOrder = 100,
@@ -1607,12 +1605,12 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 		AnchorPoint = Vector2.new(0.5, 0.43),
 		Size = UDim2.new(0.78, 0, 0.78, 0),
 		Position = UDim2.new(0.5, 0, 0.43, 0),
-	-- SILENT VOID sidebar reads ~6,9,17: darker, cooler base under the glass.
+	-- SilentVoid sidebar reads ~6,9,17: darker, cooler base under the glass.
 	BackgroundColor3 = Color3.fromRGB(8, 10, 17),
 	BackgroundTransparency = 0.25,
 	BorderSizePixel = 0,
 	ClipsDescendants = false,
-	}, SILENT VOIDCS2)
+	}, SilentVoid)
 	local MainFrameUIScale
 	local windowTargetSize = MainFrame.Size
 	local windowAnimSize = UDim2.new(
@@ -1629,7 +1627,7 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
     AnchorPoint = Vector2.new(1, 1),
     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
     BackgroundTransparency = 0.94,
-		Text = "SILENT VOID BY VIZER",
+		Text = "SilentVoid",
 		TextColor3 = Color3.fromRGB(255, 255, 255),
 		TextTransparency = 0.35,
 		TextScaled = false,
@@ -1730,7 +1728,7 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 		return img
 	end
 
-	-- SILENT VOID capsule look: five faint capsule layers, each 1px wider,
+	-- SilentVoid capsule look: five faint capsule layers, each 1px wider,
 	-- stacked under a nearly clear plate. Inside they add up to the plate's
 	-- darkness; outside they thin out, so the plate's ends melt into the
 	-- shadow instead of having a hard edge. Layers carry IsShadowLayer and
@@ -1753,7 +1751,7 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 		end
 	end
 
-	-- SILENT VOID's logo is bold white "NL" with a lavender shade 1px left/down
+	-- SilentVoid's logo is bold white "SV" with a lavender shade 1px left/down
 	-- (as on the watermark). Text, so it never depends on an image loading;
 	-- used whenever no custom hub image is given.
 	WindowObj._textLogo = function(parent, textSize, z)
@@ -1816,7 +1814,7 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 		end)
 	end
 
-	-- Default NL logo: the logo image when it loads, the drawn "NL" under it
+	-- Default SV logo: the logo image when it loads, the drawn "SV" under it
 	-- until then (and for good if it never loads).
 	WindowObj._logoWithFallback = function(parent, textSize, z, corner)
 		local text = WindowObj._textLogo(parent, textSize, z)
@@ -1928,7 +1926,7 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 		popup.Position = UDim2.new(position.X.Scale, position.X.Offset + dx, position.Y.Scale, position.Y.Offset + dy)
 	end
 
-	-- Tooltips (SILENT VOID): hovering a function for 1.5s shows its description
+	-- Tooltips (SilentVoid): hovering a function for 1.5s shows its description
 	-- in a dark plate beside the cursor; leaving or clicking hides it. One
 	-- shared plate, inside the window so it fades with the menu.
 	WindowObj._tooltip = function(target, text)
@@ -2117,10 +2115,10 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 		end
 	end
 
-	-- Neverlose option lists open instantly, centred on the field that opened
+	-- SilentVoid option lists open instantly, centred on the field that opened
 	-- them (overlapping it), not dropped below with a grow animation. Kept on
 	-- WindowObj instead of a local: AddWindow is near Luau's register cap.
-	-- Neverlose sidebar glyphs drawn on an 18x18 pixel grid (even sizes,
+	-- SilentVoid sidebar glyphs drawn on an 18x18 pixel grid (even sizes,
 	-- whole-pixel positions, centred on 9) so they stay crisp; a UIScale fits
 	-- the grid to the icon box (tabs and sub-tabs differ). The parts follow the
 	-- ImageLabel's ImageColor3/ImageTransparency, so every tint tween drives them.
@@ -2184,7 +2182,7 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 			part(grid, 13, 8, 5, 2)     -- right tick
 			part(grid, 8, 8, 2, 2)      -- centre dot
 		elseif isMouse then
-			-- Neverlose mouse: an egg-shaped solid body (fully rounded ends), a
+			-- SilentVoid mouse: an egg-shaped solid body (fully rounded ends), a
 			-- thin line under the buttons and a thin divider between them.
 			-- Odd width so the 1px divider sits exactly in the middle.
 			local body = part(grid, 4, 1, 11, 16, UDim.new(0.5, 0))
@@ -2544,7 +2542,7 @@ function Library:AddWindow(hubTitle, hubImage, gameTitle)
 			outline.Parent = field
 		end
 
-		-- Recently picked colours, shared by every picker (Neverlose keeps a swatch
+		-- Recently picked colours, shared by every picker (SilentVoid keeps a swatch
 		-- row under the hex field). Click one to apply it.
 		Library._recentColors = Library._recentColors or {}
 		local swatchRow = New("Frame", {
@@ -2724,13 +2722,13 @@ local GameInfo = Instance.new('Frame')
 GameInfo.Name = "GameInfo"
 GameInfo.AnchorPoint = Vector2.new(1, 0)
 GameInfo.Position = UDim2.new(1, -6, 0, 2)
--- Neverlose watermark: a thin, dark, see-through strip without outline or
+-- SilentVoid watermark: a thin, dark, see-through strip without outline or
 -- dividers; small caps text, accent icons, avatar at the end.
 GameInfo.Size = UDim2.fromOffset(0, 35)
 -- Width and item positions come from WindowObj._wmRelayout (animated), not
 -- from a list layout.
 GameInfo.AutomaticSize = Enum.AutomaticSize.None
--- Neverlose watermark: a dark see-through capsule over the blur (the game
+-- SilentVoid watermark: a dark see-through capsule over the blur (the game
 -- shows through tinted), no outline.
 GameInfo.BackgroundColor3 = Color3.fromRGB(8, 9, 12)
 GameInfo.BackgroundTransparency = 0.3
@@ -2738,7 +2736,7 @@ GameInfo.BorderSizePixel = 0
 GameInfo.Active = true
 GameInfo.Draggable = false
 GameInfo.ClipsDescendants = false
-GameInfo.Parent = NeverloseCS2
+GameInfo.Parent = SilentVoid
 GameInfo.ZIndex = Z_BASE + 900
 do local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(1, 0); c.Parent = GameInfo end
 if WindowObj._attachBlur then WindowObj._attachBlur(GameInfo) end
@@ -2824,21 +2822,21 @@ BrandCell.Parent = GameInfo
 do local ly = Instance.new("UIListLayout"); ly.FillDirection = Enum.FillDirection.Horizontal; ly.VerticalAlignment = Enum.VerticalAlignment.Center; ly.Padding = UDim.new(0, 8); ly.SortOrder = Enum.SortOrder.LayoutOrder; ly.Parent = BrandCell end
 do local pd = Instance.new("UIPadding"); pd.PaddingLeft = UDim.new(0, 0); pd.PaddingRight = UDim.new(0, 7); pd.Parent = BrandCell end
 
-local NeverIcon = Instance.new("ImageLabel")
-NeverIcon.Name = "NeverIcon"
-NeverIcon.LayoutOrder = 1
-NeverIcon.Size = UDim2.fromOffset(16, 16)
-NeverIcon.BackgroundTransparency = 1
-NeverIcon.BorderSizePixel = 0
-NeverIcon.Image = hubImage ~= "" and hubImage or "rbxthumb://type=Asset&id=118608145176297&w=420&h=420"
-NeverIcon.ImageColor3 = Color3.new(1, 1, 1)
-NeverIcon.ScaleType = Enum.ScaleType.Fit
-NeverIcon.ZIndex = Z_BASE + 901
-NeverIcon.Parent = BrandCell
-do local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 5); c.Parent = NeverIcon end
--- Neverlose writes "NL" as bold text with a cold tint; the image (with its dark
+local SilentVoid = Instance.new("ImageLabel")
+SilentVoid.Name = "SVBrandIcon"
+SilentVoid.LayoutOrder = 1
+SilentVoid.Size = UDim2.fromOffset(16, 16)
+SilentVoid.BackgroundTransparency = 1
+SilentVoid.BorderSizePixel = 0
+SilentVoid.Image = hubImage ~= "" and hubImage or "rbxthumb://type=Asset&id=118608145176297&w=420&h=420"
+SilentVoid.ImageColor3 = Color3.new(1, 1, 1)
+SilentVoid.ScaleType = Enum.ScaleType.Fit
+SilentVoid.ZIndex = Z_BASE + 901
+SilentVoid.Parent = BrandCell
+do local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 5); c.Parent = SilentVoid end
+-- SilentVoid writes "SV" as bold text with a cold tint; the image (with its dark
 -- square) stays available as Watermark.logo but is hidden by default.
-NeverIcon.Visible = false
+SilentVoid.Visible = false
 do
 	local brandText = Instance.new("TextLabel")
 	brandText.Name = "BrandText"
@@ -2855,7 +2853,7 @@ do
 	brandText.Parent = BrandCell
 	-- Bold caps read 1px low next to the items: lift them by 1px.
 	do local pd = Instance.new("UIPadding"); pd.PaddingBottom = UDim.new(0, 2); pd.Parent = brandText end
-	-- Lavender copy 1px left/down under the white letters, as on Neverlose.
+	-- Lavender copy 1px left/down under the white letters, as on SilentVoid.
 	brandText.ZIndex = Z_BASE + 903
 	local brandShade = brandText:Clone()
 	brandShade.Name = "BrandShade"
@@ -2880,7 +2878,7 @@ UserIcon.Parent = UserCell
 do local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(1, 0); c.Parent = UserIcon end
 WindowObj._imageFallback(UserIcon, string.upper(string.sub(tostring(LocalPlayer.Name or "?"), 1, 1)), true)
 local Username = UserCell:FindFirstChild("Username")
--- Neverlose shows only the avatar at the end of the strip; the name label stays
+-- SilentVoid shows only the avatar at the end of the strip; the name label stays
 -- available through Watermark.user for scripts that want it back.
 Username.Visible = false
 do local pd = UserCell:FindFirstChildOfClass("UIPadding"); if pd then pd.PaddingRight = UDim.new(0, 0) end end
@@ -2900,7 +2898,7 @@ do
 	WindowObj._wmSpeedText = text
 end
 
--- Neverlose watermark glyphs drawn from frames on a 15px grid: gauge (speed),
+-- SilentVoid watermark glyphs drawn from frames on a 15px grid: gauge (speed),
 -- rising bars (ping), clock (time). They follow the icon's ImageColor3 and
 -- ImageTransparency, so SetWatermark's accent still recolours them.
 WindowObj._wmGlyph = function(icon, kind)
@@ -2961,7 +2959,7 @@ SignalImage.Image = "rbxassetid://10734949856" -- lucide server
 TimeCellIcon.Image = "rbxassetid://10709805144"
 for _, icon in ipairs({ WindowObj._wmSpeed.icon, TimeCellIcon }) do icon.ImageTransparency = 0.12 end
 
--- Neverlose strip: NL | user icon + name | server icon + "VAR ±N MS" | avatar.
+-- SilentVoid strip: SV | user icon + name | server icon + "VAR ±N MS" | avatar.
 -- Name in grey with a lavender icon, ping in salmon (icon and text).
 do
 	local cell, icon, text = WMCell("Name", 3, "rbxassetid://10747373176", LocalPlayer.DisplayName or "Player") -- lucide user
@@ -3011,7 +3009,7 @@ local function ApplyWatermarkLayout(orderList, showMap)
 		cell.LayoutOrder = i * 2
 		if not hidden then table.insert(shown, { key = key, index = i }) end
 	end
-	-- No dividers: Neverlose separates the stats with spacing only.
+	-- No dividers: SilentVoid separates the stats with spacing only.
 	for _, divider in pairs(WMDividers) do divider.Visible = false end
 	GameInfo.Visible = #shown > 0 and not WindowObj._loaderActive
 	if WindowObj._wmRelayout then WindowObj._wmRelayout() end
@@ -3029,7 +3027,7 @@ do
 	WMShadowHost.BackgroundTransparency = 1
 	WMShadowHost.BorderSizePixel = 0
 	WMShadowHost.ZIndex = Z_BASE + 899
-	WMShadowHost.Parent = NeverloseCS2
+	WMShadowHost.Parent = SilentVoid
 
 	-- Watermark shadow on the sibling host (the strip itself owns a list
 	-- layout, which would swallow the layers): the melting capsule edge.
@@ -3058,10 +3056,10 @@ do
 	task.defer(WMShadowSync)
 end
 
--- Watermark items, settings and reordering (Neverlose): right-click the strip
+-- Watermark items, settings and reordering (SilentVoid): right-click the strip
 -- while the menu is open for its settings (Items, Additional Colors, Display
 -- Avatar, Position); Items picks what the strip shows; dragging an item along
--- the strip (the NL logo too) reorders it, dragging the strip's ends moves it.
+-- the strip (the SV logo too) reorders it, dragging the strip's ends moves it.
 -- Built inside a function so its locals live in their own register frame
 -- (AddWindow is close to Luau's register limit).
 WindowObj._buildWatermarkUI = function()
@@ -3536,7 +3534,7 @@ WindowObj._buildWatermarkUI()
 
 WindowObj.Watermark = {
 	frame = GameInfo,
-	logo = NeverIcon,
+	logo = SilentVoid,
 	user = Username,
 	avatar = UserIcon,
 	fps = FPSText,
@@ -3544,7 +3542,7 @@ WindowObj.Watermark = {
 	ping = MSText,
 	ram = RamText,
 	speed = WindowObj._wmSpeedText,
-	icons = { NeverIcon, UserIcon, WindowObj._wmSpeed.icon, FpsCellIcon, SignalImage, RamCellIcon, TimeCellIcon },
+	icons = { SilentVoid, UserIcon, WindowObj._wmSpeed.icon, FpsCellIcon, SignalImage, RamCellIcon, TimeCellIcon },
 	cells = WMCells,
 	applyLayout = ApplyWatermarkLayout,
 	isShown = function(key)
@@ -3575,7 +3573,7 @@ function WindowObj:SetWatermark(options)
 	if type(options.backgroundTransparency) == "number" then
 		wm.frame.BackgroundTransparency = options.backgroundTransparency
 	end
-	-- cornerRadius is ignored: the Neverlose strip is always a full capsule
+	-- cornerRadius is ignored: the SilentVoid strip is always a full capsule
 	-- (old scripts passed 5 or 8 and squared its ends).
 	if type(options.title) == "string" and wm.title then
 		wm.title.Text = options.title
@@ -3688,7 +3686,7 @@ if ok and type(value) == "number" then
 local ms = math.round(value)
 lastMs = ms
 WindowObj._lastPing = ms
--- Neverlose shows the ping variance: half the spread of recent samples.
+-- SilentVoid shows the ping variance: half the spread of recent samples.
 local hist = WindowObj._pingHistory or {}
 WindowObj._pingHistory = hist
 table.insert(hist, ms)
@@ -3741,11 +3739,11 @@ local function AttachShadow(frame, opts)
 end
 AttachShadow(MainFrame, { radius = 20, layers = 6, step = 2.0, bias = 2 })
 
--- Neverlose option list: 18,18,27 plate with a soft shadow. The plate must not
+-- SilentVoid option list: 18,18,27 plate with a soft shadow. The plate must not
 -- clip (the shadow and the scale-in sit outside it); its list frame clips rows.
 WindowObj._styleListPopup = function(popup)
-	if popup:GetAttribute("NLListStyled") then return end
-	popup:SetAttribute("NLListStyled", true)
+	if popup:GetAttribute("SVListStyled") then return end
+	popup:SetAttribute("SVListStyled", true)
 	popup.BackgroundColor3 = Color3.fromRGB(18, 18, 27)
 	popup.ClipsDescendants = false
 	if not popup:FindFirstChildWhichIsA("UIListLayout") then
@@ -3767,7 +3765,7 @@ local OverlayStack = New("Frame", {
 	BorderSizePixel = 0,
 	Visible = false,
 	ZIndex = Z_BASE + 880,
-}, NeverloseCS2)
+}, SilentVoid)
 New("UIListLayout", {
 	FillDirection = Enum.FillDirection.Vertical,
 	HorizontalAlignment = Enum.HorizontalAlignment.Right,
@@ -3776,7 +3774,7 @@ New("UIListLayout", {
 	SortOrder = Enum.SortOrder.LayoutOrder,
 }, OverlayStack)
 
--- Neverlose overlay lists (Hotkeys / Spectators) in the menu's own style:
+-- SilentVoid overlay lists (Hotkeys / Spectators) in the menu's own style:
 -- solid popup plates (18,18,25 header, 23,23,31 entries), hairline outline,
 -- layered shadow. A header (accent glyph | divider | bold title) over compact
 -- entry pairs: value or state glyph on the left, name on the right. Entries
@@ -3798,7 +3796,7 @@ function OV.pill(name, parent, alpha, radius, height, flat)
 	}, parent)
 	pill:SetAttribute("PillAlpha", alpha)
 	New("UICorner", { CornerRadius = UDim.new(1, 0) }, pill)
-	-- flat: entry pills under the header carry no shadow, as on Neverlose.
+	-- flat: entry pills under the header carry no shadow, as on SilentVoid.
 	if not flat then WindowObj._edgeShadow(pill, Z_BASE + 890) end
 	if WindowObj._attachBlur then WindowObj._attachBlur(pill, math.floor(radius * 0.6)) end
 	return pill
@@ -3825,7 +3823,7 @@ local function MakeOverlayPanel(name, iconAsset, title)
 		GroupTransparency = 1,
 		Visible = false,
 		ZIndex = Z_BASE + 890,
-	}, NeverloseCS2)
+	}, SilentVoid)
 	New("UIPadding", { PaddingLeft = UDim.new(0, OV.pad), PaddingRight = UDim.new(0, OV.pad), PaddingTop = UDim.new(0, OV.pad), PaddingBottom = UDim.new(0, OV.pad) }, panel)
 	-- 8px under the header: its 5px shadow (1px lower) ends before the rows.
 	New("UIListLayout", { FillDirection = Enum.FillDirection.Vertical, HorizontalAlignment = Enum.HorizontalAlignment.Left, Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }, panel)
@@ -3928,7 +3926,7 @@ local function FadeOverlayContents(root, show)
 		elseif node:IsA("Frame") and node:GetAttribute("IsShadowLayer") then
 			if show then node.BackgroundTransparency = 1 end
 			go(node, { BackgroundTransparency = show and (node:GetAttribute("ShadowAlpha") or 0.9) or 1 })
-		elseif node:IsA("Frame") and node:GetAttribute("NLOverlayAccentPart") then
+		elseif node:IsA("Frame") and node:GetAttribute("SVOverlayAccentPart") then
 			if show then node.BackgroundTransparency = 1 end
 			go(node, { BackgroundTransparency = show and 0 or 1 })
 		end
@@ -4048,7 +4046,7 @@ local KBPanel, KBRows = MakeOverlayPanel("Keybinds", OV.icons.list, "Hotkeys")
 local kbEnabled = true
 local kbRowCache = {}
 
--- State glyph for binds without a value. Toggle: the Neverlose filled
+-- State glyph for binds without a value. Toggle: the SilentVoid filled
 -- switch (on: white track, dark knob on the right; off: grey track, knob
 -- left). Hold and always use the hand and dot icons.
 function OV.modeGlyph(pill, mode, off)
@@ -4058,14 +4056,14 @@ function OV.modeGlyph(pill, mode, off)
 			Size = UDim2.fromOffset(16, 10), BackgroundColor3 = off and Color3.fromRGB(96, 100, 112) or Color3.fromRGB(240, 240, 244),
 			BackgroundTransparency = 0, BorderSizePixel = 0, ZIndex = Z_BASE + 892,
 		}, pill)
-		track:SetAttribute("NLOverlayAccentPart", true)
+		track:SetAttribute("SVOverlayAccentPart", true)
 		New("UICorner", { CornerRadius = UDim.new(1, 0) }, track)
 		local knob = New("Frame", {
 			Name = "SwitchKnob", AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, off and 2 or 8, 0.5, 0),
 			Size = UDim2.fromOffset(6, 6), BackgroundColor3 = OV.entry, BackgroundTransparency = 0, BorderSizePixel = 0,
 			ZIndex = Z_BASE + 893,
 		}, track)
-		knob:SetAttribute("NLOverlayAccentPart", true)
+		knob:SetAttribute("SVOverlayAccentPart", true)
 		New("UICorner", { CornerRadius = UDim.new(1, 0) }, knob)
 		return
 	end
@@ -4286,7 +4284,7 @@ Aspect.AspectRatio = 798 / 610
 			ScaleType = Enum.ScaleType.Stretch,
 		}, HubIcon)
 		New("UICorner", { CornerRadius = UDim.new(0, 8) }, HubIcon:FindFirstChild("HubGlyph"))
-		WindowObj._imageFallback(HubIcon:FindFirstChild("HubGlyph"), "NL")
+		WindowObj._imageFallback(HubIcon:FindFirstChild("HubGlyph"), "SV")
 	else
 		WindowObj._logoWithFallback(HubIcon, 19, HubIcon.ZIndex + 1, 8)
 	end
@@ -4411,7 +4409,7 @@ local SettingsArrow = New("ImageLabel", {
 	-- tinting the bare 150x30 frame into a hard rectangle. Kept in a do-block
 	-- so it adds no live local to AddWindow (register cap).
 	do
-		-- Divider across the sidebar above the account block, as in Neverlose.
+		-- Divider across the sidebar above the account block, as in SilentVoid.
 		New("Frame", {
 			Name = "ProfileDivider",
 			Position = UDim2.new(0, -3, 0, -14),
@@ -4456,7 +4454,7 @@ UIAspectRatioConstraint.Parent = SettingsArrow
 	WindowSettingsFrame.Size = UDim2.fromOffset(240, 0)
 	WindowSettingsFrame.AutomaticSize = Enum.AutomaticSize.Y
 	WindowSettingsFrame.ClipsDescendants = false
-	WindowSettingsFrame.BackgroundColor3 = Color3.fromRGB(24, 25, 33) -- Neverlose profile popover
+	WindowSettingsFrame.BackgroundColor3 = Color3.fromRGB(24, 25, 33) -- SilentVoid profile popover
 	WindowSettingsFrame.BackgroundTransparency = 0
 	WindowSettingsFrame.ZIndex = 101
 	do Stroke(WindowSettingsFrame) end
@@ -4542,7 +4540,7 @@ UIAspectRatioConstraint.Parent = SettingsArrow
         pad.Parent = SettingsContainer
     end
 
-	-- Compact account block matching the Neverlose profile popover reference.
+	-- Compact account block matching the SilentVoid profile popover reference.
 		do
 			local header = Instance.new("Frame")
 			header.Name = "ProfileHeader"
@@ -4616,10 +4614,10 @@ UIAspectRatioConstraint.Parent = SettingsArrow
 			renew.ZIndex = 121
 			renew.Parent = header
 
-			-- Neverlose separates row groups with spacing, not divider lines.
+			-- SilentVoid separates row groups with spacing, not divider lines.
 			for _, spacerOrder in ipairs({ 5, 55, 65, 85 }) do
 				local gap = New("Frame", { Name = "ProfileGroupGap", Size = UDim2.new(1, 0, 0, 9), BackgroundTransparency = 1, BorderSizePixel = 0, LayoutOrder = spacerOrder }, SettingsContainer)
-				-- Neverlose separates the groups with a hairline.
+				-- SilentVoid separates the groups with a hairline.
 				New("Frame", { Name = "GroupLine", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.new(1, -8, 0, 1), BackgroundColor3 = Color3.fromRGB(255, 255, 255), BackgroundTransparency = 0.93, BorderSizePixel = 0 }, gap)
 			end
 		end
@@ -4884,7 +4882,7 @@ UIAspectRatioConstraint.Parent = SettingsArrow
 				end
 				return false
 			end
-			for _, object in ipairs(NeverloseCS2:GetDescendants()) do
+			for _, object in ipairs(SilentVoid:GetDescendants()) do
 				-- Colour swatches show a user's chosen value, not the theme.
 				local lowerName = string.lower(object.Name)
 				local isSwatch = lowerName:find("colorpicker") or lowerName:find("swatch") or lowerName:find("preview") or lowerName:find("svcursor")
@@ -5163,7 +5161,7 @@ do
 		local factor = tonumber(tostring(value):match("^(%d+)%%$"))
 		factor = factor and factor / 100 or 1
 		for _, name in ipairs({ "OverlayStack", "GameInfo", "WMShadow" }) do
-			local target = NeverloseCS2:FindFirstChild(name)
+			local target = SilentVoid:FindFirstChild(name)
 			if target then
 				local scale = target:FindFirstChild("ProfileWindowsScale") or New("UIScale", { Name = "ProfileWindowsScale" }, target)
 				scale.Scale = factor
@@ -5261,7 +5259,7 @@ do
 					InvokeCallback(WindowObj._onProfileAction, key)
 				elseif key == "About" then
 					-- Links: clicking one copies it (executors expose setclipboard).
-					openChoiceList(label, { "t.me/neverlosewtf", "t.me/shizukuscripts" }, nil, function(choice)
+					openChoiceList(label, { "t.me/VIZERtgk", "t.me/vizerftap" }, nil, function(choice)
 						if type(setclipboard) == "function" then pcall(setclipboard, "https://" .. tostring(choice)) end
 					end)
 				else
@@ -5352,7 +5350,7 @@ end
 					local anchorPos = Info.AbsolutePosition
 					local anchorSize = Info.AbsoluteSize
 					local popupAppearsOnRight = true
-					local gui = NeverloseCS2
+					local gui = SilentVoid
 					if gui and gui.AbsoluteSize.X > 0 and gui.AbsoluteSize.Y > 0 then
 						local edge = 8
 						local safeLeft = gui.AbsolutePosition.X + edge
@@ -5422,7 +5420,7 @@ end
 		WMRow.BackgroundTransparency = 1
 		WMRow.ZIndex = 120
 		WMRow.LayoutOrder = 50
-		-- Hidden for now: not part of the Neverlose profile popover. Win:SetWatermark still works.
+		-- Hidden for now: not part of the SilentVoid profile popover. Win:SetWatermark still works.
 		WMRow.Visible = false
 		WMRow.Parent = SettingsContainer
 
@@ -5828,7 +5826,7 @@ end
 
 	do local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 14); c.Parent = Frame2 end
 	-- Glass: the sidebar shows the blurred game through MainFrame (0.25); the
-	-- content panel stacks 0.5 on top so it reads denser, as in Neverlose.
+	-- content panel stacks 0.5 on top so it reads denser, as in SilentVoid.
 	do local panelStroke = Stroke(Frame2, "PanelOutline"); panelStroke.Transparency = 0.94 end
 	New("Frame", { Name = "HeaderDivider", Position = UDim2.new(0, 11, 0, 53), Size = UDim2.new(1, -22, 0, 1), BackgroundColor3 = Color3.fromRGB(255, 255, 255), BackgroundTransparency = 0.95, BorderSizePixel = 0 }, Frame2)
 
@@ -5864,7 +5862,7 @@ asss.Parent = SearchBtn
 	end
 
 	local function GetConfigPath(name)
-		return "NeverloseConfig_" .. windowConfigId .. "_" .. SanitizeConfigName(name) .. ".json"
+		return "SilentVoidConfig_" .. windowConfigId .. "_" .. SanitizeConfigName(name) .. ".json"
 	end
 
 	local function SaveNamedConfig(name)
@@ -5888,7 +5886,7 @@ asss.Parent = SearchBtn
 		if not ok or type(encoded) ~= "string" then return false end
 		local writeOk, writeResult = pcall(writefile, GetConfigPath(name), encoded)
 		if writeOk and writeResult ~= false then
-			pcall(writefile, "NeverloseConfig_" .. windowConfigId .. "__last.txt", SanitizeConfigName(name))
+			pcall(writefile, "SilentVoidConfig_" .. windowConfigId .. "__last.txt", SanitizeConfigName(name))
 		end
 		return writeOk and writeResult ~= false
 	end
@@ -5903,7 +5901,7 @@ asss.Parent = SearchBtn
 		local http = game:GetService("HttpService")
 		local decodedOk, data = pcall(http.JSONDecode, http, content)
 		if not decodedOk or type(data) ~= "table" then return false end
-		pcall(writefile, "NeverloseConfig_" .. windowConfigId .. "__last.txt", SanitizeConfigName(name))
+		pcall(writefile, "SilentVoidConfig_" .. windowConfigId .. "__last.txt", SanitizeConfigName(name))
 		local success = true
 		for _, entry in ipairs(_registeredElements) do
 			local saved = data[entry.key]
@@ -5924,7 +5922,7 @@ asss.Parent = SearchBtn
 		return success
 	end
 
-	-- Share codes: "NL1:" + base64 of {"name","data"}. Copied from a preset's
+	-- Share codes: "SV:" + base64 of {"name","data"}. Copied from a preset's
 	-- menu; pasting one into the "+" name field imports it as a new preset.
 	do
 		local B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
@@ -5970,12 +5968,12 @@ asss.Parent = SearchBtn
 			if not data then return nil end
 			local okEncode, json = pcall(http.JSONEncode, http, { name = name, data = data })
 			if not okEncode then return nil end
-			return "NL1:" .. encode(json)
+			return "SV1:" .. encode(json)
 		end
 		-- Returns the imported preset name, or nil if the text is not a valid code.
 		WindowObj._importShareCode = function(text)
 			text = tostring(text or ""):gsub("^%s+", ""):gsub("%s+$", "")
-			if string.sub(text, 1, 4) ~= "NL1:" or type(writefile) ~= "function" then return nil end
+			if string.sub(text, 1, 4) ~= "SV:" or type(writefile) ~= "function" then return nil end
 			local okDecode, payload = pcall(function() return http:JSONDecode(decode(string.sub(text, 5))) end)
 			if not okDecode or type(payload) ~= "table" or type(payload.data) ~= "table" then return nil end
 			local base = SanitizeConfigName(payload.name or "Shared")
@@ -5996,7 +5994,7 @@ asss.Parent = SearchBtn
 		local result = {}
 		local ok, files = pcall(listfiles, "")
 		if not ok or type(files) ~= "table" then return result end
-		local prefix = "NeverloseConfig_" .. windowConfigId .. "_"
+		local prefix = "SilentVoidConfig_" .. windowConfigId .. "_"
 		for _, fileName in ipairs(files) do
 			if type(fileName) == "string" and string.sub(fileName, 1, #prefix) == prefix then
 				local name = fileName:match("^" .. prefix .. "(.+)%.json$")
@@ -6021,7 +6019,7 @@ asss.Parent = SearchBtn
 	do Stroke(Save) end
 	-- Save is its own square button left of the preset field (a field, not a
 	-- local: AddWindow is near the register cap).
-	-- Save and preset are one pill (Neverlose): a 32px save segment, a hairline
+	-- Save and preset are one pill (SilentVoid): a 32px save segment, a hairline
 	-- divider, then the preset name. A field, not a local (register cap).
 	WindowObj._saveBox = New("Frame", {
 		Name = "SaveSegmentBox", Position = UDim2.fromOffset(0, 0), Size = UDim2.fromOffset(32, 28),
@@ -6203,8 +6201,8 @@ UIAspectRatioConstraint.Parent = SaveArrow
 	local ConfigMainFrame = Instance.new("Frame")
 	ConfigMainFrame.Name = "ConfigMainFrame"
 	ConfigMainFrame.Position = UDim2.fromOffset(11, 47)
-	ConfigMainFrame.Size = UDim2.fromOffset(320, 104) -- Neverlose presets panel is ~320 wide
-	ConfigMainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26) -- Neverlose presets panel
+	ConfigMainFrame.Size = UDim2.fromOffset(320, 104) -- SilentVoid presets panel is ~320 wide
+	ConfigMainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26) -- SilentVoid presets panel
 	ConfigMainFrame.BackgroundTransparency = 0.045
 	ConfigMainFrame.BorderSizePixel = 0
 	ConfigMainFrame.ZIndex = 110
@@ -6255,7 +6253,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 	CloudIcon.ScaleType = Enum.ScaleType.Fit
 	CloudIcon.ZIndex = 1000
 	CloudIcon.Parent = CMHeader
-	-- The asset reads as a folder; Neverlose's PRESETS tab has a cloud. Draw it
+	-- The asset reads as a folder; SilentVoid's PRESETS tab has a cloud. Draw it
 	-- from rounded frames instead (two puffs over a rounded base).
 	CloudIcon.Image = ""
 	do
@@ -6295,7 +6293,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 	CMTitle.Position = UDim2.new(0, 44, 0, 0)
 	CMTitle.Size = UDim2.new(1, -154, 1, 0)
 	CMTitle.BackgroundTransparency = 1
-	-- Neverlose shows the active tab as an accent-tinted pill: cloud + "PRESETS".
+	-- SilentVoid shows the active tab as an accent-tinted pill: cloud + "PRESETS".
 	CMTitle.Text = "PRESETS"
 	CMTitle.TextColor3 = mainColor:Lerp(Color3.new(1, 1, 1), 0.35)
 	CMTitle.TextSize = 13
@@ -6464,7 +6462,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 		-- and was cut off.
 		New("UIPadding", { PaddingRight = UDim.new(0, 8), PaddingTop = UDim.new(0, 2), PaddingLeft = UDim.new(0, 2), PaddingBottom = UDim.new(0, 6) }, ListContainer)
 	end
-	-- Sort button beside the search field (Neverlose has one): A-Z / Z-A by name.
+	-- Sort button beside the search field (SilentVoid has one): A-Z / Z-A by name.
 	do
 		local sortDesc = false
 		local function applyConfigSort()
@@ -6510,7 +6508,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 	local SAVE_ICON = "rbxassetid://122894934359450"
 	local LOAD_ICON = "rbxassetid://109698732019071"
 
-	local DELETED_FILE = "NeverloseDeleted_" .. windowConfigId .. ".json"
+	local DELETED_FILE = "SilentVoidDeleted_" .. windowConfigId .. ".json"
 	local _deletedConfigs = {}
 
 	local function LoadDeletedList()
@@ -6622,7 +6620,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 	RDList.Parent = RecentlyDeletedPanel
 	do local ll = Instance.new("UIListLayout"); ll.Padding = UDim.new(0, 6); ll.Parent = RDList end
 
-	-- Neverlose recently-deleted list: plain cards with the name, a red bin
+	-- SilentVoid recently-deleted list: plain cards with the name, a red bin
 	-- (delete for good) and a restore arrow; no header bar.
 	RDHeader.Visible = false
 	RDList.Position = UDim2.fromOffset(8, 8)
@@ -6713,7 +6711,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 	local activeLoadBtn = nil
 	local activeConfigName = nil
 
-	-- Header controls, Neverlose-style: the save icon is its own button (saves
+	-- Header controls, SilentVoid-style: the save icon is its own button (saves
 	-- the loaded preset), every segment lights up on hover like the tabs, and
 	-- "Global" opens the Weapon Presets list.
 	do
@@ -6893,7 +6891,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 	WindowObj._autoLoad = function()
 		if WindowObj._autoLoaded or type(readfile) ~= "function" or type(isfile) ~= "function" then return end
 		WindowObj._autoLoaded = true
-		local path = "NeverloseConfig_" .. windowConfigId .. "__last.txt"
+		local path = "SilentVoidConfig_" .. windowConfigId .. "__last.txt"
 		local okExists, exists = pcall(isfile, path)
 		if not okExists or not exists then return end
 		local ok, name = pcall(readfile, path)
@@ -6907,7 +6905,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 		SetActiveConfigName(nil)
 	end
 
-	-- Neverlose preset rows: 21,21,29 cards; the loaded one is lighter with an
+	-- SilentVoid preset rows: 21,21,29 cards; the loaded one is lighter with an
 	-- accent outline.
 	-- (Literal colours, not locals: AddWindow is near Luau's register cap.)
 	local function DeactivateRow(rowFrame, loadBtn)
@@ -6969,7 +6967,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 			dotsIcon.Name = "DotsIcon"
 			dotsIcon.AnchorPoint = Vector2.new(0.5, 0.5)
 			dotsIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
-			-- Neverlose keeps the row icons small and muted; only the label stands out.
+			-- SilentVoid keeps the row icons small and muted; only the label stands out.
 			dotsIcon.Size = UDim2.fromOffset(14, 14)
 			dotsIcon.BackgroundTransparency = 1
 			dotsIcon.Image = "rbxassetid://95127553964880"
@@ -6991,7 +6989,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 		LoadConfigBtn.ZIndex = 3000
 		LoadConfigBtn.Parent = row
 
-		-- Neverlose row menu: Share / Duplicate / divider / Delete, with icons,
+		-- SilentVoid row menu: Share / Duplicate / divider / Delete, with icons,
 		-- opening just right of the dots.
 		local SettingsFrame = Instance.new("Frame")
 		SettingsFrame.Name = "SettingsFrame"
@@ -7212,7 +7210,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 				activeLoadBtn = LoadConfigBtn
 				SetActiveConfigName(name)
 				Tween(row, {BackgroundColor3 = Color3.fromRGB(27, 27, 35)}, 0.2)
-				-- Neverlose marks the loaded preset quietly: a muted lavender outline
+				-- SilentVoid marks the loaded preset quietly: a muted lavender outline
 				-- and a light save icon, not a bright accent ring.
 				local outline = row:FindFirstChild("ConfigRowStroke")
 				if outline then Tween(outline, { Color = Color3.fromRGB(73, 79, 117), Transparency = 0 }, 0.2) end
@@ -7269,7 +7267,7 @@ UIAspectRatioConstraint.Parent = SaveArrow
 				-- Grow only (no text fade): rows rebuilt while the panel opens were
 				-- caught mid open-fade and stayed invisible. Rows built during the
 				-- opening itself are not animated at all.
-				local openedAt = panel:GetAttribute("NLOpenedAt") or 0
+				local openedAt = panel:GetAttribute("SVOpenedAt") or 0
 				if child:IsA("Frame") and child.Name ~= "Space" and os.clock() - openedAt > 0.35 then
 					local full = child.Size
 					child.ClipsDescendants = true
@@ -7383,7 +7381,7 @@ ConfirmAddBtn.MouseButton1Click:Connect(function()
 		end)
 	end
 
-	-- Neverlose opens the recently-deleted list beside the presets panel (to
+	-- SilentVoid opens the recently-deleted list beside the presets panel (to
 	-- its right) and keeps the presets panel open.
 	do
 		local function closeDeleted()
@@ -7398,7 +7396,7 @@ ConfirmAddBtn.MouseButton1Click:Connect(function()
 				ConfigMainFrame.Position.X.Offset + ConfigMainFrame.Size.X.Offset + 8,
 				ConfigMainFrame.Position.Y.Offset)
 			ApplyZIndexLadder(RecentlyDeletedPanel, NextPopupZ())
-			RecentlyDeletedPanel:SetAttribute("NLOpenedAt", os.clock())
+			RecentlyDeletedPanel:SetAttribute("SVOpenedAt", os.clock())
 			RememberPopupClipping(RecentlyDeletedPanel)
 			SmoothOpen(RecentlyDeletedPanel, 0, 0.16)
 			local rdScale = GetPopupScale(RecentlyDeletedPanel)
@@ -7454,7 +7452,7 @@ ConfirmAddBtn.MouseButton1Click:Connect(function()
 				end
 			end)
 			ConfigMainFrame.Visible = true
-			ConfigMainFrame:SetAttribute("NLOpenedAt", os.clock())
+			ConfigMainFrame:SetAttribute("SVOpenedAt", os.clock())
 			ConfigScale.Scale = 0.95
 			Tween(ConfigScale, { Scale = 1 }, 0.22, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 			WindowObj._fadeTree(ConfigMainFrame, true, 0.22)
@@ -7469,7 +7467,7 @@ ConfirmAddBtn.MouseButton1Click:Connect(function()
 
 	local SearchBox = New("TextBox", {
 		Name = "SearchBox",
-		-- Neverlose search takes over the whole header bar (selectors hidden under
+		-- SilentVoid search takes over the whole header bar (selectors hidden under
 		-- it) and the magnifier turns into a close cross at its right end.
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -11, 0.5, 0),
@@ -7635,7 +7633,7 @@ ConfirmAddBtn.MouseButton1Click:Connect(function()
 				if elementsFrame then
 					for _, element in ipairs(elementsFrame:GetChildren()) do
 						if element:IsA("GuiObject") then
-							local baseVisible = element:GetAttribute("NLSearchBaseVisible")
+							local baseVisible = element:GetAttribute("SVSearchBaseVisible")
 							if baseVisible == nil then baseVisible = element.Visible end
 							if baseVisible and SearchMatches(GetSearchText(element), query) then return true end
 						end
@@ -7702,25 +7700,25 @@ ConfirmAddBtn.MouseButton1Click:Connect(function()
 							local elementsFrame = section:FindFirstChild("Elements")
 							local sectionLabel = section:FindFirstChild("SectionLabel", true) or section:FindFirstChild("SectionTitle", true)
 							local sectionText = sectionLabel and GetSearchText(sectionLabel) or ""
-							local sectionBaseVisible = section:GetAttribute("NLSearchBaseVisible")
+							local sectionBaseVisible = section:GetAttribute("SVSearchBaseVisible")
 							if sectionBaseVisible == nil then
 								sectionBaseVisible = section.Visible
-								section:SetAttribute("NLSearchBaseVisible", sectionBaseVisible)
+								section:SetAttribute("SVSearchBaseVisible", sectionBaseVisible)
 							end
 							local sectionMatch = query == "" or SearchMatches(sectionText, query)
 							local anyVisible = false
 							if elementsFrame then
-								local elementsBaseVisible = elementsFrame:GetAttribute("NLSearchBaseVisible")
+								local elementsBaseVisible = elementsFrame:GetAttribute("SVSearchBaseVisible")
 								if elementsBaseVisible == nil then
 									elementsBaseVisible = elementsFrame.Visible
-									elementsFrame:SetAttribute("NLSearchBaseVisible", elementsBaseVisible)
+									elementsFrame:SetAttribute("SVSearchBaseVisible", elementsBaseVisible)
 								end
 								for _, element in ipairs(elementsFrame:GetChildren()) do
 									if element:IsA("GuiObject") then
-										local baseVisible = element:GetAttribute("NLSearchBaseVisible")
+										local baseVisible = element:GetAttribute("SVSearchBaseVisible")
 										if baseVisible == nil then
 											baseVisible = element.Visible
-											element:SetAttribute("NLSearchBaseVisible", baseVisible)
+											element:SetAttribute("SVSearchBaseVisible", baseVisible)
 										end
 										local elementText = GetSearchText(element)
 										local matches = baseVisible and (query == "" or sectionMatch or SearchMatches(elementText, query))
@@ -7731,10 +7729,10 @@ ConfirmAddBtn.MouseButton1Click:Connect(function()
 								elementsFrame.Visible = elementsBaseVisible and anyVisible
 							end
 							if sectionLabel then
-								local labelBaseVisible = sectionLabel:GetAttribute("NLSearchBaseVisible")
+								local labelBaseVisible = sectionLabel:GetAttribute("SVSearchBaseVisible")
 								if labelBaseVisible == nil then
 									labelBaseVisible = sectionLabel.Visible
-									sectionLabel:SetAttribute("NLSearchBaseVisible", labelBaseVisible)
+									sectionLabel:SetAttribute("SVSearchBaseVisible", labelBaseVisible)
 								end
 								sectionLabel.Visible = labelBaseVisible and anyVisible
 							end
@@ -7879,7 +7877,7 @@ Line9.Parent = MainFrame
 	ToggleBtn.TextScaled = false
 	ToggleBtn.Font = FONT
 	ToggleBtn.ZIndex = 999
-	ToggleBtn.Parent = NeverloseCS2
+	ToggleBtn.Parent = SilentVoid
 	do local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 6); c.Parent = ToggleBtn end
 	-- The loader (outside this function) hides it until loading ends.
 	WindowObj._toggleBtn = ToggleBtn
@@ -7971,7 +7969,7 @@ Line9.Parent = MainFrame
 			Tween(MainFrame, { Size = windowAnimSize }, dur, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 			task.delay(dur + 0.02, function()
 				if guiOpen then return end
-				-- Plates close only once everything has faded with the window.
+				-- Plates close oSVy once everything has faded with the window.
 				HideAllPopupsNow(true)
 				if ConfigMainFrame then ConfigMainFrame.Visible = false end
 				if WindowSettingsFrame then WindowSettingsFrame.Visible = false end
@@ -8030,7 +8028,7 @@ end
 		if part then part.Transparency = 1 end
 		if AcrylicBlur.Instances and AcrylicBlur.Instances.DepthOfField then AcrylicBlur.Instances.DepthOfField.Enabled = false end
 	else
-		-- The glass part only tracks the window while this runs; it used to start
+		-- The glass part oSVy tracks the window while this runs; it used to start
 		-- on the first RShift toggle, so the blur showed up late.
 		if not AcrylicBlur.Signal then
 			AcrylicBlur.Signal = game:GetService("RunService").RenderStepped:Connect(AcrylicBlur.Update)
@@ -8042,15 +8040,15 @@ end
 WindowObj._setupWindowToggle()
 WindowObj._setupWindowToggle = nil
 
--- Neverlose-style loader toast: NL badge, "neverlose", progress "k of 10" and an
+-- SilentVoid-style loader toast: SV badge, "SilentVoid", progress "k of 10" and an
 -- accent gradient running around the border. Opens the window when done.
 -- Set Library.ShowLoader = false before AddWindow to skip it.
 if Library.ShowLoader ~= false then task.spawn(function()
 	-- Loader in the watermark's look (dark see-through capsule over the blur)
-	-- framed by the soft accent glow whose bright side slowly circles; NL
+	-- framed by the soft accent glow whose bright side slowly circles; SV
 	-- badge, title, status and "k of 10".
 	local toast = New("Frame", {
-		Name = "NeverloseLoader",
+		Name = "SilentVoidLoader",
 		AnchorPoint = Vector2.new(1, 0),
 		-- Top right like the watermark, 8px under the real screen top (the
 		-- ScreenGui keeps the top-bar inset); starts off-screen, slides in.
@@ -8060,8 +8058,8 @@ if Library.ShowLoader ~= false then task.spawn(function()
 		BackgroundTransparency = 0.3,
 		BorderSizePixel = 0,
 		ZIndex = Z_BASE + 990,
-	}, NeverloseCS2)
-	-- Rounded card, not a capsule (Neverlose loader).
+	}, SilentVoid)
+	-- Rounded card, not a capsule (SilentVoid loader).
 	New("UICorner", { CornerRadius = UDim.new(0, 18) }, toast)
 	if WindowObj._attachBlur then WindowObj._attachBlur(toast, 8) end
 	-- Glow: faint capsule layers in the accent colour fading outwards, each
@@ -8096,7 +8094,7 @@ if Library.ShowLoader ~= false then task.spawn(function()
 		Size = UDim2.fromOffset(38, 38), BackgroundColor3 = Color3.fromRGB(14, 17, 30), BorderSizePixel = 0, ZIndex = Z_BASE + 991,
 	}, toast)
 	New("UICorner", { CornerRadius = UDim.new(0, 11) }, badge)
-	-- Same logo as the window badge: custom image, or the drawn "NL".
+	-- Same logo as the window badge: custom image, or the drawn "SV".
 	if hubImage ~= "" then
 		local badgeLogo = New("ImageLabel", {
 			Name = "BadgeLogo", Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1,
@@ -8121,9 +8119,9 @@ if Library.ShowLoader ~= false then task.spawn(function()
 		BackgroundTransparency = 1, Text = "0 of 10", TextColor3 = Color3.fromRGB(225, 227, 234), TextSize = 14, Font = FONT_BOLD,
 		TextXAlignment = Enum.TextXAlignment.Right, ZIndex = Z_BASE + 991,
 	}, toast)
-	counter.Font = FONT_BOLD -- New() resets fonts by name; bold as on Neverlose
+	counter.Font = FONT_BOLD -- New() resets fonts by name; bold as on SilentVoid
 
-	-- The watermark waits for the loader, like Neverlose's.
+	-- The watermark waits for the loader, like SilentVoid's.
 	-- (Later SetWatermark calls stay hidden too: ApplyWatermarkLayout checks the flag.)
 	WindowObj._loaderActive = true
 	local watermarkFrame = WindowObj.Watermark and WindowObj.Watermark.frame
@@ -8151,7 +8149,7 @@ if Library.ShowLoader ~= false then task.spawn(function()
 	-- preloaded in batches (one step each), then fonts and configs.
 	do
 		local seen, assets = {}, {}
-		for _, d in ipairs(NeverloseCS2:GetDescendants()) do
+		for _, d in ipairs(SilentVoid:GetDescendants()) do
 			if (d:IsA("ImageLabel") or d:IsA("ImageButton")) and d.Image ~= "" and not seen[d.Image] then
 				seen[d.Image] = true
 				table.insert(assets, d)
@@ -8240,7 +8238,7 @@ end) end
 		return lbl
 	end
 
-	-- Neverlose "Players" preview for the right column of a tab or sub-tab:
+	-- SilentVoid "Players" preview for the right column of a tab or sub-tab:
 	-- Enemies / Teammates switch, ESP Items and expand buttons on top; below,
 	-- your character standing idle, or the ESP Items picker (chips in Main,
 	-- Flags and Weapon groups). Sections bound to a team show only while that
@@ -8562,7 +8560,7 @@ end) end
 			end
 			layoutBar(false)
 		end)
-		-- Scale switch (Neverlose): on = ESP items scale together; hover shows
+		-- Scale switch (SilentVoid): on = ESP items scale together; hover shows
 		-- what turning it off does.
 		local tip = New("TextLabel", {
 			Name = "ScaleTip", AnchorPoint = Vector2.new(0, 0.5), Size = UDim2.fromOffset(0, 26), AutomaticSize = Enum.AutomaticSize.X,
@@ -8634,7 +8632,7 @@ end) end
 		local TabButtonFrame = New("Frame", {
 			Name = "TabButton",
 			Size = UDim2.new(1, 0, 0, 32),
-			-- Neverlose selected tab: a solid grey plate (~44,45,54). A faint white
+			-- SilentVoid selected tab: a solid grey plate (~44,45,54). A faint white
 			-- tint let the game behind the glass show through it.
 			BackgroundColor3 = Color3.fromRGB(35, 38, 50),
 			BackgroundTransparency = isFirst and 0.08 or 1,
@@ -8669,7 +8667,7 @@ end) end
 		if icon and icon ~= "" then
 			GetImageData(icon, TabIcon)
 		end
-		-- Neverlose sidebar glyphs (Rage crosshair, Legit mouse, Misc...) drawn
+		-- SilentVoid sidebar glyphs (Rage crosshair, Legit mouse, Misc...) drawn
 		-- from frames; other names keep their image asset.
 		WindowObj._drawTabGlyph(icon, TabIcon)
 		table.insert(_coloredElements, { type = "tabicon", ref = TabIcon })
@@ -8821,7 +8819,7 @@ New("UIAspectRatioConstraint", {
 		local TabObj = {}
 		local sectionOrder = { left = 0, right = 0 }
 
-		-- CS2-style loadout page for this tab (replaces its two columns): the
+		-- -style loadout page for this tab (replaces its two columns): the
 		-- team switch (CT / T Loadout) on top, your own character as the agent
 		-- with six gear slots under it, and Pistols / Mid-Tier / Rifles columns
 		-- of five weapon slots. Slots are see-through cards with the weapon
@@ -8865,7 +8863,7 @@ New("UIAspectRatioConstraint", {
 			Left:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitHeight)
 			task.defer(fitHeight)
 
-			-- Slot tile as on the Neverlose inventory: dark tile, faint outline,
+			-- Slot tile as on the SilentVoid inventory: dark tile, faint outline,
 			-- a grade bar along the bottom edge (neutral grey on templates).
 			local function card(parent, name)
 				local c = New("TextButton", {
@@ -8886,7 +8884,7 @@ New("UIAspectRatioConstraint", {
 
 			-- Left side: team switch, agent, gear slots.
 			local side = New("Frame", { Name = "AgentSide", Size = UDim2.new(0.32, 0, 1, 0), BackgroundTransparency = 1 }, page)
-			-- Team switch as on CS2: CT on the left, T on the right, always. The
+			-- Team switch as on : CT on the left, T on the right, always. The
 			-- open team's pill widens to show "X Loadout"; the other stays a
 			-- round logo. Clicking the round one opens that team. 2px down so
 			-- the outlines are not clipped by the column.
@@ -8920,7 +8918,7 @@ New("UIAspectRatioConstraint", {
 				b.MouseLeave:Connect(function() if team ~= which then Tween(b, { BackgroundTransparency = 1 }, 0.14) end end)
 				teamButtons[which] = { button = b, title = title, index = index }
 			end
-			-- The pair is centred over the agent (CT left, T right), as on Neverlose.
+			-- The pair is centred over the agent (CT left, T right), as on SilentVoid.
 			local function layoutTeams(instant)
 				local total = -8
 				for _, which in ipairs({ "CT", "T" }) do
@@ -9093,7 +9091,7 @@ New("UIAspectRatioConstraint", {
 				for i = 1, 5 do
 					local slot = card(slots, category .. "_" .. i)
 					slot.LayoutOrder = (c - 1) * 5 + i
-					-- Light rule under each slot, as on the CS2 loadout.
+					-- Light rule under each slot, as on the  loadout.
 					-- Blank template: the weapon is known (onSelect gets its name) but
 					-- not written on the card.
 					slot.MouseButton1Click:Connect(function()
@@ -9138,8 +9136,8 @@ New("UIAspectRatioConstraint", {
 				LayoutOrder = sectionOrder[side],
 			}, col)
 			-- Read by the hotkey list to name generic functions ("Enabled").
-			Section:SetAttribute("NLTabName", tostring(name))
-			Section:SetAttribute("NLSectionName", title)
+			Section:SetAttribute("SVTabName", tostring(name))
+			Section:SetAttribute("SVSectionName", title)
 			New("UIListLayout", { Padding = UDim.new(0, 2), SortOrder = Enum.SortOrder.LayoutOrder }, Section)
 
 local SectionTitle = Instance.new('Frame')
@@ -9192,15 +9190,15 @@ end
 				Size = UDim2.new(1, 0, 0, 0),
 				Position = UDim2.new(0, 0, 0, 0),
 				BackgroundColor3 = Color3.fromRGB(23, 23, 31),
-				BackgroundTransparency = 0.1, -- Neverlose card: neutral (~21,21,28 on the panel), slightly see-through
+				BackgroundTransparency = 0.1, -- SilentVoid card: neutral (~21,21,28 on the panel), slightly see-through
 				BorderSizePixel = 0,
 				AutomaticSize = Enum.AutomaticSize.Y,
 				LayoutOrder = 1,
 				ClipsDescendants = false,
 			}, Section)
 			do local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 14); c.Parent = Elements end
-			Elements:SetAttribute("NLGroupOutlineInset", true)
-			do local groupStroke = Stroke(Elements, "GroupOutline"); groupStroke:SetAttribute("NLBaseTransparency", 0.92) end
+			Elements:SetAttribute("SVGroupOutlineInset", true)
+			do local groupStroke = Stroke(Elements, "GroupOutline"); groupStroke:SetAttribute("SVBaseTransparency", 0.92) end
 			-- Inset rows slightly from the card edges. This keeps each side of the
 			-- rounded outline visible even when a row uses an opaque background.
 			New("UIPadding", {
@@ -9282,7 +9280,7 @@ end
 				SettingsFrame.Name = "SettingsFrame"
 				SettingsFrame.Position = UDim2.new(0.02, 0, 1, 4)
 				SettingsFrame.Size = UDim2.new(0.96, 0, 0, 0)
-				SettingsFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 25) -- Neverlose plate
+				SettingsFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 25) -- SilentVoid plate
 				SettingsFrame.BackgroundTransparency = 0.045
 				SettingsFrame.BorderSizePixel = 0
 				SettingsFrame.Visible = false
@@ -9303,7 +9301,7 @@ end
 				AttachShadow(SettingsFrame, { radius = 12, layers = 5, step = 1.6, bias = 3 })
 
 				-- PATCH 4: settings plate header + no divider watcher
-				-- Neverlose plate title: regular weight, light grey, larger than rows.
+				-- SilentVoid plate title: regular weight, light grey, larger than rows.
 				local PLATE_HEADER = 40
 				New("TextLabel", {
 					Name = "PlateTitle",
@@ -9323,7 +9321,7 @@ end
 				SFContainer.AnchorPoint = Vector2.new(0, 0)
 				SFContainer.Position = UDim2.new(0.04, 0, 0, PLATE_HEADER + 3 / GetMainFrameScale())
 				SFContainer.Size = UDim2.new(0.92, 0, 1, -(PLATE_HEADER + 10 / GetMainFrameScale()))
-				-- Neverlose plates group their rows on an inner card, without dividers.
+				-- SilentVoid plates group their rows on an inner card, without dividers.
 				SFContainer.BackgroundColor3 = Color3.fromRGB(27, 27, 36)
 				-- The inner card is the plate colour with only a hairline border.
 				SFContainer.BackgroundTransparency = 1
@@ -9406,7 +9404,7 @@ end
 					local leftX = SettingsBtn.AbsolutePosition.X + SettingsBtn.AbsoluteSize.X + 8 * scale
 					leftX = math.clamp(leftX, mainLeft + edge, math.max(mainLeft + edge, mainRight - panelWidth - edge))
 
-					-- Neverlose: the plate opens just right of the dots, its top a little
+					-- SilentVoid: the plate opens just right of the dots, its top a little
 					-- above the row, and is pushed up only if it would leave the window.
 					local y = parentPosition.Y - 6 * scale
 					y = math.clamp(y, mainTop + edge, math.max(mainTop + edge, mainBottom - visualHeight - edge))
@@ -9456,7 +9454,7 @@ end
 					SmoothOpen(SettingsFrame, 0, 0.18)
 					-- Pops out of the dots (UIScale grows from the plate's top-left).
 					Tween(SFScale, {Scale = 1}, 0.26, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
-					-- The dots stay highlighted while their plate is open, as in Neverlose.
+					-- The dots stay highlighted while their plate is open, as in SilentVoid.
 					if not SettingsBtn:FindFirstChildOfClass("UICorner") then New("UICorner", { CornerRadius = UDim.new(0, 5) }, SettingsBtn) end
 					SettingsBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 					Tween(SettingsBtn, { BackgroundTransparency = 0.9 }, 0.12)
@@ -10205,11 +10203,11 @@ New("Frame", {
 							local generic = { enabled = true, enable = true, active = true, on = true, toggle = true }
 							if generic[string.lower(label)] then
 								local node = target.row
-								while node and not node:GetAttribute("NLTabName") do node = node.Parent end
+								while node and not node:GetAttribute("SVTabName") do node = node.Parent end
 								if node then
-									local section = tostring(node:GetAttribute("NLSectionName") or "")
+									local section = tostring(node:GetAttribute("SVSectionName") or "")
 									local plain = { [""] = true, main = true, general = true, other = true, settings = true, misc = true }
-									label = plain[string.lower(section)] and tostring(node:GetAttribute("NLTabName")) or section
+									label = plain[string.lower(section)] and tostring(node:GetAttribute("SVTabName")) or section
 								end
 							end
 							target.listLabel = label
@@ -10223,7 +10221,7 @@ New("Frame", {
 				return out
 			end
 
-			-- Neverlose hotkey editor (opens right of the hotkey menu): Key chip,
+			-- SilentVoid hotkey editor (opens right of the hotkey menu): Key chip,
 			-- Mode chip with its glyph, Value and Visible switches, red Delete.
 			-- Everything the editor needs lives in bindRefs (register budget).
 			local bindRefs = {}
@@ -10575,7 +10573,7 @@ New("Frame", {
 				end
 			end
 
-			-- Neverlose hotkey menu: All Hotkeys, the function's hotkeys (each
+			-- SilentVoid hotkey menu: All Hotkeys, the function's hotkeys (each
 			-- opens its editor), New Hotkey (adds one under the others and opens
 			-- it), Reset. Rebuilt in place when the list changes.
 			bindRefs.fillContext = function(target)
@@ -10619,7 +10617,7 @@ New("Frame", {
 				bindRefs.fillContext(target)
 				ApplyZIndexLadder(_contextMenu, NextPopupZ())
 				SmoothOpen(_contextMenu, 0, 0.15)
-				-- Opens at the cursor, like Neverlose.
+				-- Opens at the cursor, like SilentVoid.
 				MovePopupToAbsolute(_contextMenu, point.X + 4, point.Y + 4)
 				ConstrainPopupToMainFrame(_contextMenu, 8)
 				local settled = _contextMenu.Position
@@ -11916,7 +11914,7 @@ New("Frame", {
 				TextArrow.ImageColor3 = Color3.fromRGB(255, 255, 255)
 				TextArrow.ImageTransparency = 0.3
 				TextArrow.ScaleType = Enum.ScaleType.Fit
-				-- Neverlose marks these rows with ">" and opens a plate beside the row.
+				-- SilentVoid marks these rows with ">" and opens a plate beside the row.
 				TextArrow.Rotation = -90
 				TextArrow.Parent = DropdownSection
 
@@ -12855,7 +12853,7 @@ New("Frame", {
 				-- ActivateTab() has just selected it; running the opposite tweens
 				-- in the same frame caused a visible flash on every tab switch.
 				if activeTabIndex == tabIndex then
-					-- With sub-tabs, Neverlose highlights the sub-tab, not the parent.
+					-- With sub-tabs, SilentVoid highlights the sub-tab, not the parent.
 					Tween(TabButtonFrame, {
 						BackgroundColor3 = Color3.fromRGB(35, 38, 50),
 						BackgroundTransparency = 1,
@@ -12943,7 +12941,7 @@ New("Frame", {
 				Name = "STRow_" .. name,
 				Size = UDim2.new(0.92, 0, 1, 0),
 				-- Sub-tabs use the same plate, grey idle text/icon and accent icon as
-				-- the main tabs (Neverlose "Players / World"), not a side bar.
+				-- the main tabs (SilentVoid "Players / World"), not a side bar.
 				BackgroundColor3 = Color3.fromRGB(35, 38, 50),
 				BackgroundTransparency = isFirstST and 0.08 or 1,
 				LayoutOrder = stIndex,
@@ -13174,7 +13172,7 @@ New("Frame", {
 		end
 		-- Only touch text that still has the previous customization colour: this
 		-- pass used to paint every label one colour (grey values, accent "Renew",
-		-- the NL row grey) and drop the bold font from titles.
+		-- the SV row grey) and drop the bold font from titles.
 		local previousText = customization._appliedTextColor or Color3.fromRGB(226, 228, 236)
 		local function isPreviousText(color)
 			return math.abs(color.R - previousText.R) < 0.01 and math.abs(color.G - previousText.G) < 0.01 and math.abs(color.B - previousText.B) < 0.01
@@ -13312,7 +13310,7 @@ New("Frame", {
 		return WindowObj._customMenus
 	end
 
-	MakeReadableText(NeverloseCS2, 9, 16)
+	MakeReadableText(SilentVoid, 9, 16)
 	CleanBorders(MainFrame)
 
 	task.defer(function()
@@ -13333,7 +13331,7 @@ New("Frame", {
 			Position = UDim2.new(0, -50, 0, -50),
 			Size = UDim2.fromOffset(1, 1),
 			BackgroundTransparency = 1,
-		}, NeverloseCS2)
+		}, SilentVoid)
 		for i, asset in ipairs(preloadAssets) do
 			New("ImageLabel", {
 				Name = "P" .. tostring(i),
